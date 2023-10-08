@@ -1,6 +1,9 @@
 const express = require('express');
  require('./config')
 const cors = require('cors')
+const axios = require('axios')
+
+
 const Product = require('./product')
 const User = require('./user')
 const app = express('')
@@ -11,6 +14,7 @@ const jwtKey = 'screate-key';
 
 app.use(express.json());
 app.use(cors());
+
 
 
 
@@ -38,9 +42,24 @@ app.get('/signUP',async(req,res)=>{
     res.send(result)
 });
 
-    app.get("/random-Joke",(req,res)=>{
+    app.get("/random-Joke",async(req,res)=>{
+        try {
+        
+            const response = await axios.get('https://api.chucknorris.io/jokes/random');
 
-         res.send('https://api.chucknorris.io/jokes/random')
+            if (response.status === 200) {        
+              res.status(200).send(response.data);
+            } else {
+              
+              res.status(response.status)
+            }
+          } catch (error) {
+
+            console.error(error);
+    
+          }
+
+        
 
     })
 
